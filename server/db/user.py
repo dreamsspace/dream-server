@@ -18,7 +18,6 @@ class UserDB:
     """
     def __init__(self):
         if not os.path.isdir(DB_STORE_PATH):
-            print('DB store path not present, mkdir...')
             os.mkdir(DB_STORE_PATH)
 
         # Open DB file for read/write, create new file if not already present.

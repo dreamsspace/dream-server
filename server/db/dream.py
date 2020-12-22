@@ -27,7 +27,7 @@ class DreamDB:
 
         # Open DB file for read/write, create new file if not already present.
         # Uses "sync" mode so all writes are flushed to disk.
-        self._store = dbm.open(db_abs_path, flag='c')
+        self._store = dbm.open(db_abs_path, flag='cs')
 
     def get_by_id(self, dream_id: str) -> Optional[Dream]:
         """
@@ -39,7 +39,9 @@ class DreamDB:
         if data is None:
             return None
 
-        return dream_schema.loads(data)
+        # There are some inconsistencies with dbm storage types. It is possible
+        # this needs to be revisted and string types must be enforced.
+        return dream_schema.loads(data)  # type: ignore
 
     def store_dream(self, dream: Dream) -> None:
         """

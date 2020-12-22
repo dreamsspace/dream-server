@@ -1,4 +1,5 @@
 from server.db.dream import dream_db
+from server.db.user import user_db
 from server.schema.dream import Dream, DreamSurvey, InterestItem
 
 
@@ -34,6 +35,7 @@ class DreamService:
         that the user can complete to provide more information.
         """
         dream_db.store_dream(dream)
+        user_db.add_dream_to_user(dream.user_id, dream.dream_id)
         return self._create_dream_survey(dream)
 
     def update_dream_with_survey(self, survey: DreamSurvey) -> None:

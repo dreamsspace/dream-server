@@ -12,6 +12,4 @@ venv/
 *.log
 *.out
 .DS_Store
-
-# May want to include this at some point as an example.
-sbb.txt
+test.sh
