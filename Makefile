@@ -1,7 +1,11 @@
-test:
+lint:
 	flake8
 	mypy -p server
+
+pytest:
 	pytest tests
+
+test: lint pytest
 
 install:
 	pip install -r requirements.txt

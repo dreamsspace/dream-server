@@ -1,4 +1,4 @@
-from typing import List
+from typing import Optional, List
 
 import datetime
 from uuid import uuid4
@@ -50,12 +50,31 @@ class Dream:
     """
     The container for storing information about a single dream for a single user.
     """
-    def __init__(self, user_id: str, contents: str):
-        self.dream_id: str = str(uuid4())
+    def __init__(
+        self,
+        user_id: str,
+        contents: str,
+        dream_id: Optional[str] = None,
+        created_at: Optional[datetime.datetime] = None,
+        interest_items: Optional[List[InterestItem]] = None,
+    ):
         self.user_id: str = user_id
-        self.created_at: datetime.datetime = datetime.datetime.now()
         self.contents: str = contents
-        self.interest_items: List[InterestItem] = []
+
+        if dream_id is None:
+            self.dream_id: str = str(uuid4())
+        else:
+            self.dream_id = dream_id
+
+        if created_at is None:
+            self.created_at: datetime.datetime = datetime.datetime.now()
+        else:
+            self.created_at = created_at
+
+        if interest_items is None:
+            self.interest_items: List[InterestItem] = []
+        else:
+            self.interest_items = interest_items
 
 
 class DreamSchema(Schema):

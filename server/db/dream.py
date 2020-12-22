@@ -8,21 +8,26 @@ from server.schema.dream import Dream, DreamSurvey, dream_schema
 
 DB_STORE_PATH = os.path.expanduser('~/db')
 DB_NAME = 'dream.db'
-DB_ABS_PATH = os.path.join(DB_STORE_PATH, DB_NAME)
 
 
 class DreamDB:
     """
     A singleton meant to be instantiated at server startup that stores Dream data models.
     """
-    def __init__(self):
-        if not os.path.isdir(DB_STORE_PATH):
-            print('DB store path not present, mkdir...')
+    def __init__(self, db_path: Optional[str] = None):
+        db_store_path = DB_STORE_PATH
+        # Use a dir path if provided, this is for easy testing and cleanup.
+        # Otherwise use the default DB_STORE_PATH.
+        if db_path is not None:
+            db_store_path = db_path
+        elif not os.path.isdir(DB_STORE_PATH):
             os.mkdir(DB_STORE_PATH)
+
+        db_abs_path = os.path.join(db_store_path, DB_NAME)
 
         # Open DB file for read/write, create new file if not already present.
         # Uses "sync" mode so all writes are flushed to disk.
-        self._store = dbm.open(DB_ABS_PATH, flag='c')
+        self._store = dbm.open(db_abs_path, flag='c')
 
     def get_by_id(self, dream_id: str) -> Optional[Dream]:
         """
