@@ -27,7 +27,9 @@ class DreamDB:
 
         # Open DB file for read/write, create new file if not already present.
         # Uses "sync" mode so all writes are flushed to disk.
-        self._store = dbm.open(db_abs_path, flag='cs')
+        # Flag options are dbm implementation specific, but mypy is confused by
+        # which are the available options.
+        self._store = dbm.open(db_abs_path, flag='cs')  # type: ignore
 
     def get_by_id(self, dream_id: str) -> Optional[Dream]:
         """

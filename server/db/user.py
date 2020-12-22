@@ -50,6 +50,7 @@ class UserDB:
         """
         Store a User object in the DB, overwriting the existing item if present.
         """
+        self._store[USERNAME_PREFIX + user.name] = user.user_id
         # Save a JSON serialization of the User object.
         self._store[user.user_id] = user_schema.dumps(user)
 

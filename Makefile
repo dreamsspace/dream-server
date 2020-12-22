@@ -5,6 +5,7 @@ lint:
 pytest:
 	pytest tests
 
+.PHONY: test
 test: lint pytest
 
 install:
@@ -14,7 +15,7 @@ start_server: install
 	gunicorn -w 4 -b 127.0.0.1:8000 server:app&
 
 dev_server:
-	FLASK_ENV=development FLASK_APP=server:app flask run
+	FLASK_ENV=development FLASK_APP=server:app flask run --no-reload
 
 clean:
 	find . -name *.out -or -name *.log -or -name .*.swp -or -name .*.swo -or -name .DS_Store -or -name .swp -or -name *.pyc | xargs -n 1 rm
