@@ -1,6 +1,5 @@
 import yake
 from wordcloud import WordCloud, ImageColorGenerator
-import numpy as np
 from PIL import Image
 from wordcloud import WordCloud
 from matplotlib import pyplot as plt
