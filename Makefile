@@ -3,6 +3,7 @@ lint:
 	mypy -p server
 
 pytest:
+	# runs all files in tests/ with tests prefix
 	pytest tests
 
 .PHONY: test

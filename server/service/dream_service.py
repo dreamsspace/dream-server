@@ -1,3 +1,7 @@
+# mypy: ignore-errors
+
+import yake
+# type: ignore
 from server.db.dream import dream_db
 from server.db.user import user_db
 from server.schema.dream import Dream, DreamSurvey, InterestItem
@@ -5,8 +9,36 @@ from server.schema.dream import Dream, DreamSurvey, InterestItem
 
 class DreamService:
     def __init__(self):
-        # TODO - any one-time initialization, like loading models etc
-        pass
+        # load in keyword extraction model\
+        # custom parameters
+        language = "en"
+        max_ngram_size = 2
+        deduplication_thresold = 0.9
+        deduplication_algo = 'seqm'
+        windowSize = 1
+        numOfKeywords = 20
+
+        self.custom_kw_extractor = yake.KeywordExtractor(
+            lan=language,
+            n=max_ngram_size,
+            dedupLim=deduplication_thresold,
+            dedupFunc=deduplication_algo,
+            windowsSize=windowSize,
+            top=numOfKeywords,
+            features=None
+        )
+
+    def _create_keywords(self, dream: Dream) -> None:
+        """
+        Parse and analyze the provided dream and return a rank-ordered dictionary of keywords
+        and their relative importance value.
+        """
+
+        keywords = self.custom_kw_extractor.extract_keywords(dream.contents)
+        ranked_keywords = {
+                w: f for w, f in keywords
+            }
+        dream.ranked_keywords = ranked_keywords
 
     def _create_dream_survey(self, dream: Dream) -> DreamSurvey:
         """
