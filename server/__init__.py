@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 from flask import Flask, make_response, session
 from webargs import fields
 from webargs.flaskparser import use_args
@@ -9,8 +11,8 @@ from server.schema.dream import (
     dreams_schema,
     DreamSurvey,
     DreamSurveySchema,
-    dream_survey_schema,
-)
+    dream_survey_schema
+    )
 from server.schema.user import LoginSchema
 from server.service.dream_service import dream_service
 from server.service.user_service import user_service
