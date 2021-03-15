@@ -3,6 +3,7 @@ lint:
 	mypy -p server
 
 pytest:
+	rm ~/db/dream*
 	# runs all files in tests/ with tests prefix
 	pytest tests
 

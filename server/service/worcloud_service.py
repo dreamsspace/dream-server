@@ -9,7 +9,7 @@ from wordcloud import WordCloud
 from server.schema.dream import Dream
 
 
-def _create_wordcloud(dream: Dream) -> None:
+def create_wordcloud(dream: Dream) -> None:
     '''
     Configures custom wordcloud. See parameters in WordCloud() for customization.
     Inputs:

@@ -5,6 +5,7 @@ import yake
 from server.db.dream import dream_db
 from server.db.user import user_db
 from server.schema.dream import Dream, DreamSurvey, InterestItem
+# from server.service.worcloud_service import create_wordcloud
 
 
 class DreamService:
@@ -16,7 +17,7 @@ class DreamService:
         deduplication_thresold = 0.9
         deduplication_algo = 'seqm'
         windowSize = 1
-        numOfKeywords = 20
+        numOfKeywords = 5
 
         self.custom_kw_extractor = yake.KeywordExtractor(
             lan=language,
@@ -66,6 +67,8 @@ class DreamService:
         Saves a new dream for a user, parses its content, and returns a DreamSurvey
         that the user can complete to provide more information.
         """
+        self._create_keywords(dream)
+        # create_wordcloud(dream)
         dream_db.store_dream(dream)
         user_db.add_dream_to_user(dream.user_id, dream.dream_id)
         return self._create_dream_survey(dream)
