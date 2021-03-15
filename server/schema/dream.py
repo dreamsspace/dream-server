@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 import datetime
 from uuid import uuid4
@@ -57,6 +57,8 @@ class Dream:
         dream_id: Optional[str] = None,
         created_at: Optional[datetime.datetime] = None,
         interest_items: Optional[List[InterestItem]] = None,
+        ranked_keywords: Optional[Dict[str, float]] = None,
+        wordcloud_base64: Optional[bytes] = None
     ):
         self.user_id: str = user_id
         self.contents: str = contents
@@ -76,6 +78,16 @@ class Dream:
         else:
             self.interest_items = interest_items
 
+        if ranked_keywords is None:
+            self.ranked_keywords = {}
+        else:
+            self.ranked_keywords = ranked_keywords
+
+        if wordcloud_base64 is None:
+            self.wordcloud_base64 = None
+        else:
+            self.wordcloud_base64 = wordcloud_base64
+
 
 class DreamSchema(Schema):
     dream_id = fields.Str()
@@ -83,6 +95,8 @@ class DreamSchema(Schema):
     created_at = fields.DateTime()
     contents = fields.Str()
     interest_items = fields.Nested(InterestItemSchema, many=True)
+    ranked_keywords = fields.Dict(keys=fields.Str(), values=fields.Float())
+    wordcloud_base64 = fields.Str(missing=None, allow_none=True)
 
     @post_load
     def make_dream(self, data, **kwargs):

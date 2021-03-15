@@ -36,7 +36,7 @@ def test_login(client):
 
 def test_add_dream(client):
     resp = client.post(
-        '/dream', json={'user_id': '123', 'contents': 'foobar'},
+        '/dream', json={'user_id': '123', 'contents': 'dream content'},
     )
     assert resp.status_code == 200
     assert resp.is_json
@@ -51,7 +51,7 @@ def test_get_dreams(client):
     )
     assert resp.status_code == 200
     user_id = resp.json['user_id']
-
+    
     resp = client.post(
         '/dream', json={'user_id': user_id, 'contents': 'foobar'},
     )
@@ -60,3 +60,46 @@ def test_get_dreams(client):
     resp = client.get(f'/dream-log?user_id={user_id}')
     assert resp.status_code == 200
     assert resp.json
+
+
+def test_return_wordcloud(client):  
+    resp = client.post(
+        '/login', json={'username': 'joe', 'password': 'baseball'},
+    )
+    assert resp.status_code == 200
+    user_id = resp.json['user_id']
+    
+    resp = client.post(
+        '/dream', json={'user_id': user_id, 'contents': 'this is another test dream with dinosaurs'},
+    )
+    assert resp.status_code == 200
+
+    resp = client.get(f'/dream-log?user_id={user_id}')
+    assert resp.status_code == 200
+    assert resp.is_json
+
+    assert resp.json['dreams'][0]['wordcloud_base64'] is not None
+
+    print(resp.__dict__)
+    print(resp.json)
+    # assert dream_survey_schema.load(resp.json)
+
+
+def test_return_ranked_keywords(client):  
+    resp = client.post(
+        '/login', json={'username': 'joe', 'password': 'baseball'},
+    )
+    assert resp.status_code == 200
+    user_id = resp.json['user_id']
+    
+    resp = client.post(
+        '/dream', json={'user_id': user_id, 'contents': 'this is another test dream with dinosaurs'},
+    )
+    assert resp.status_code == 200
+
+    resp = client.get(f'/dream-log?user_id={user_id}')
+    assert resp.status_code == 200
+    assert resp.is_json
+
+    assert resp.json['dreams'][0]['ranked_keywords'] is not None
+    assert resp.json['dreams'][0]['ranked_keywords'].get('foobar') == 0.04491197687864554
